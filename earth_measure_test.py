@@ -1,6 +1,7 @@
 from math import sin, cos, acos, radians, degrees
 from haversine import haversine, Unit
 
+
 def great_circle_distance(lat1, lng1, lat2, lng2):
     lat1_r = radians(lat1)
     lng1_r = radians(lng1)

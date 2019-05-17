@@ -7,6 +7,8 @@ import scipy.ndimage
 import numpy as np
 from matplotlib.widgets import Slider
 from matplotlib.ticker import FormatStrFormatter
+import matplotlib.image as mpimg
+from PIL import Image
 
 
 def get_unit(latitude, longitude):
@@ -43,9 +45,8 @@ def download_map(latitude, longitude, size, res):
             coord[i][j] = (lat, lng)
             data[i][j] = alt
     # TODO: Automatized name
-    coord.to_csv('coord5.csv', sep=",", index=False, header=False)
-    data.to_csv('map5.csv', sep=",", index=False, header=False)
-    return data
+    coord.to_csv('data/coord7.csv', sep=",", index=False, header=False)
+    data.to_csv('data/map7.csv', sep=",", index=False, header=False)
 
 
 def flood_map(altitudes, sea_level):
@@ -63,17 +64,10 @@ def flood_map(altitudes, sea_level):
     return data, proportion_flooded
 
 
-# TODO: Create download manager
-# ---------------------------------------------------
-# ---------------------------------------------------
-# ---------------------------------------------------
-# map = download_map(-54.97736393,-65.46282539, 20, 1)
-# ---------------------------------------------------
-# ---------------------------------------------------
-# ---------------------------------------------------
 
 
-def generate_map(sea_level):
+
+def generate_map(sea_level, show_img):
 
     altitudes = scipy.ndimage.zoom(map, 3)
     flood, prop_flood = flood_map(altitudes, sea_level)
@@ -89,7 +83,7 @@ def generate_map(sea_level):
     ax.cla()
 
     plt.rcParams['hatch.color'] = 'r'
-    plt.rcParams['hatch.linewidth'] = 0.2
+    plt.rcParams['hatch.linewidth'] = 0.3
 
     CS_flood = ax.contourf(
                             Y, X, flood, 1, colors='none',
@@ -101,11 +95,21 @@ def generate_map(sea_level):
 
     CS_alti = ax.contour(X, Y, altitudes, 10, cmap="viridis", linewidths=1)
     ax.clabel(CS_alti, inline=1, fontsize=6, fmt='%.1f')
+
+
+    if(show_img):
+        img = mpimg.imread('map1.png')
+        # imgplot = plt.imshow(img)
+        ax.imshow(img, extent=[0, 60, 0, 60], origin='lower', alpha=0.5)
+
     ax.set_title('proportion of land flooded =  {:.2f}'.format(prop_flood))
     ax.set_aspect('equal')
     ax.set_ylim(ax.get_ylim()[::-1])
     ax.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
     ax.xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+
+
+
     # ax.set_xlim(ax.get_xlim()[::-1])
 
 
@@ -123,12 +127,11 @@ def generate_map_3d(sea_level):
     ax = plt.axes(projection='3d')
     ax.plot_wireframe(X, Y, level, color="magenta", alpha=1, linewidths=1)
     ax.plot_surface(
-                    X, Y, map, cmap="viridis",
-                    lw=3, rstride=1, cstride=1,
+                    X, Y, map, cmap="viridis", rstride=1, cstride=1,
                     alpha=0.50, antialiased=True)
     ax.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
     ax.contour(
-                X, Y, map, 10, lw=3, colors="k",
+                X, Y, map, 10, colors="k",
                 linestyles="solid", linewidths=1)
     for angle in range(0, 90):
         ax.view_init(30, angle + 180)
@@ -139,7 +142,7 @@ def generate_map_3d(sea_level):
 
 def update(val):
     lvl = slider1.val
-    generate_map(lvl)
+    generate_map(lvl, False)
     plt.draw()
 
 
@@ -147,8 +150,16 @@ global map
 global coord
 
 # TODO: Set file manager
-map = pd.read_csv('map.csv', header=None, sep=',')
-coord = pd.read_csv('coord.csv', header=None, sep=',')
+# TODO: Create download manager
+# ---------------------------------------------------
+# ---------------------------------------------------
+# ---------------------------------------------------
+# download_map(46.08065218, 7.40284907, 4, 5)
+# ---------------------------------------------------
+# ---------------------------------------------------
+# ---------------------------------------------------
+map = pd.read_csv('data/map2.csv', header=None, sep=',')
+coord = pd.read_csv('data/coord2.csv', header=None, sep=',')
 
 sea_level = 0
 
@@ -166,8 +177,15 @@ slider1 = Slider(
 
 slider1.on_changed(update)
 
-generate_map(min_alt-10)
+generate_map(min_alt-10, False)
 
 plt.show()
 
 generate_map_3d(slider1.val)
+
+
+
+# img_low = Image.open('map.png')
+# img_low.thumbnail((20,20), Image.ANTIALIAS)
+# imgplot = plt.imshow(img_low)
+# plt.show()
