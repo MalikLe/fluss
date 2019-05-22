@@ -23,6 +23,8 @@ pip install requests
 
 ## Usage
 
+Set your Google Elevation API and Google Static Map keys in keys.py, then
+
 ```bash
 python main.py
 ```
