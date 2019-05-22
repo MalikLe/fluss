@@ -1,6 +1,7 @@
 import pandas as pd
 import urllib.request
 import json
+import keys
 from geocoder import get_unit
 
 
@@ -17,7 +18,8 @@ def resquest_elevation(lat, lng):
         * Parallelize the request!
     """
     # Build request
-    apikey = "AIzaSyBH2YY_t66XDHsx6GtLEteWw_vqzSJMjt4"
+    # TODO: Test centralized key for elevation API
+    apikey = keys.elevation_API_key
     url = "https://maps.googleapis.com/maps/api/elevation/json"
     # Send request
     request = urllib.request.urlopen(

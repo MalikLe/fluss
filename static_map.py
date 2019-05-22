@@ -1,4 +1,5 @@
 import requests
+import keys
 
 
 def download_map_sat(lat, lng, id):
@@ -14,7 +15,8 @@ def download_map_sat(lat, lng, id):
     """
     # Variables affectation
     # Key of the API
-    api_key = "AIzaSyDfplxEDp5BdGp_2n3Z68pLLwWcMY9CXgU"
+    # TODO: Test centralized key for API
+    api_key = keys.staticmap_API_key
     # Zoom level (20: very close, 1: very far)
     zl = "15"
     # Center of the map

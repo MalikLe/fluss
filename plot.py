@@ -9,7 +9,7 @@ def set_parameters():
     global fig
     global ax
     # Set whether to show the satellite image (True) or not (False)
-    show_img = True
+    show_img = False
     fig, ax = plt.subplots()
     # Set the hatches
     plt.rcParams['hatch.color'] = 'r'

@@ -117,6 +117,7 @@ def generate_map_3d(sea_level, size, res):
     Todo:
         * Adjust the scales
     """
+
     map = maps.elevation
     # Compute the number of tiles
     nb_tiles = int(size) * int(res)
@@ -136,6 +137,7 @@ def generate_map_3d(sea_level, size, res):
     ax = plt.axes(projection='3d')
     # Plot the sea level
     ax.plot_wireframe(X, Y, level, color="magenta", alpha=1, linewidths=1)
+    # TODO: Adjuste the scale
     # Plot the surface of the terrain
     ax.plot_surface(
                     X, Y, map, cmap="viridis", rstride=1, cstride=1,

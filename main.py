@@ -1,3 +1,4 @@
+import sys
 # Import functions
 from request_elevation import *
 from generate_maps import *
@@ -11,31 +12,39 @@ from mpl_toolkits.mplot3d import axes3d
 # Import global variables
 import maps
 import plot
+import keys
 
 # I/O Interface
 print("Welcome on Fluss 0.1")
 new = input("Download a new map? [y, n]")
 
 if new == 'y':
-    sure = input("Downloading a new map may take a minute, are you sure you want to continue? [y, n]")
+    sure = input(
+        '''Downloading a new map may take a minute,
+           are you sure you want to continue? [y, n]''')
     if sure == 'y':
-        # Create a new map
-        address = input("Enter an address (i.e uniersity of lausanne):")
-        size = input("Enter the size of the map in km (i.e 4):")
-        res = input("Enter the resolution per km (i.e 5):")
-        # Geocode the address
-        lat, lng = get_coordinates(address)
-        # Add the address to the database
-        id = add_location(address, lat, lng, size, res)
-        print("LOADING ...")
-        # Download elevation map WARNING: takes time
-        download_elevations(lat, lng, size, res, id)
-        # Download a satellite picture of the area
-        download_map_sat(lat, lng, id)
-        # Read the result of the download
-        maps.read_map(id, address)
+        if keys.elevation_API_key != "" and keys.staticmap_API_key != "":
+            # Create a new map
+            address = input("Enter an address (i.e uniersity of lausanne):")
+            size = input("Enter the size of the map in km (i.e 4):")
+            res = input("Enter the resolution per km (i.e 5):")
+            # Geocode the address
+            lat, lng = get_coordinates(address)
+            # Add the address to the database
+            id = add_location(address, lat, lng, size, res)
+            print("LOADING ...")
+            # Download elevation map WARNING: takes time
+            download_elevations(lat, lng, size, res, id)
+            # Download a satellite picture of the area
+            download_map_sat(lat, lng, id)
+            # Read the result of the download
+            maps.read_map(id, address)
+        else:
+            print(
+                "Keys not found. Please, set the API keys in the file keys.py")
+            sys.exit()
 
-else:
+if new == "n" or sure == "n":
     # Choose among exisiting map
     print("Choose a map:")
     # Show existing map in the database
@@ -43,7 +52,11 @@ else:
     # Ask for index
     req = input("Enter an index: ")
     # Get informations of the map through index
-    id, address, size, res = get_info_from_index(req)
+    try:
+        id, address, size, res = get_info_from_index(req)
+    except:
+        print("Invalid index")
+        sys.exit()
     # Read the result of the choice
     maps.read_map(id, address)
 
