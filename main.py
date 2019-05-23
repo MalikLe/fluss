@@ -75,7 +75,7 @@ axSlider1 = plt.axes([0.1, 0.05, 0.8, 0.05])
 plt.subplots_adjust(left=0.1, bottom=0.15)
 # Create the slider
 slider1 = Slider(axSlider1, 'level:', valmin=min_alt,
-                 valmax=max_alt-1, valstep=step)
+                 valmax=max_alt-1)
 # Define slider behaviour
 slider1.on_changed(update)
 
