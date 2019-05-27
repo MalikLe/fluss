@@ -12,6 +12,7 @@ Fluss is a python application for simulating flooding scenarios all over the wor
 Clone this repo to your local machine using https://github.com/MalikLe/fluss.git
 
 ### Requirements
+Python 3.7 or latest.
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the dependencies.
 
